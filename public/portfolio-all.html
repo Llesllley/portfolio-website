@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>All Projects — Lesley Liu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="/projects-data.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+
+html, body {
+  margin: 0; padding: 0;
+  background: #1c1c1c;
+  color: #F4F1E8;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+
+/* ===== FADE IN ===== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { opacity: 0; animation: fadeUp 0.6s ease forwards; }
+
+/* ===== MENU CTA (smaller) ===== */
+.menu-cta-btn { position: relative; overflow: hidden; display: flex; align-items: center; border: none; background: none; cursor: pointer; border-radius: 9999px; padding: 6px; gap: 8px; }
+.menu-cta-bg {
+  position: absolute; top: 5px; bottom: 5px; left: 8px;
+  width: calc(100% - 8px - 8px - 38px - 8px);
+  border-radius: 9999px; background: white; z-index: 0;
+  transition: width 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.menu-cta-btn:hover .menu-cta-bg { width: calc(100% - 12px); }
+.menu-cta-text { position: relative; z-index: 1; color: #111111; font-weight: 500; font-size: 14px; padding: 8px 40px; white-space: nowrap; }
+.menu-cta-circle {
+  position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 50%; background: #75C5DE; flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.menu-cta-btn:hover .menu-cta-circle { transform: translateX(-4px); }
+
+/* ===== NAVIGATION ===== */
+.logo-wrapper {
+  position: fixed; top: 30px; left: 0; width: 50%; z-index: 10;
+  display: flex; justify-content: flex-start; align-items: center; mix-blend-mode: difference;
+}
+@media (min-width: 768px) { .logo-wrapper { top: 40px; } }
+.logo-wrapper .inner { padding-left: 20px; }
+@media (min-width: 768px) { .logo-wrapper .inner { padding-left: 40px; } }
+.logo-wrapper a { color: #F4F1E8; font-weight: 600; font-size: 20px; letter-spacing: 0.02em; text-decoration: none; transition: opacity 0.2s ease; }
+.logo-wrapper a:hover { opacity: 0.7; }
+
+/* ===== NAV BACKDROP ===== */
+/* Sits behind the fixed logo/nav/burger so scrolled grid tiles fade out
+   under them instead of overlapping the text directly. */
+.nav-backdrop {
+  position: fixed; top: 0; left: 0; right: 0; height: 120px; z-index: 9;
+  background: linear-gradient(180deg, rgba(28,28,28,0.95) 0%, rgba(28,28,28,0.75) 55%, rgba(28,28,28,0) 100%);
+  pointer-events: none;
+}
+
+/* ===== DESKTOP NAV ===== */
+.nav-links {
+  display: none;
+  position: fixed; top: 40px; right: 0; z-index: 10;
+  gap: 36px; align-items: center;
+  padding-right: 40px;
+}
+.nav-links a {
+  position: relative;
+  color: #F4F1E8; font-size: 15px; font-weight: 500; text-decoration: none;
+  transition: opacity 0.3s ease;
+  padding: 6px 4px;
+}
+.nav-links a:hover { opacity: 0.7; }
+
+.nav-current-circle {
+  position: absolute; left: 50%; top: 50%;
+  width: 175%; height: 260%;
+  transform: translate(-50%, -50%) rotate(-3deg);
+  pointer-events: none;
+}
+.nav-current-circle svg { width: 100%; height: 100%; overflow: visible; }
+
+@media (min-width: 768px) {
+  .nav-links { display: flex; }
+}
+
+.burger-wrapper {
+  position: fixed; top: 16px; right: 0; width: 50%; z-index: 10;
+  display: flex; justify-content: flex-end; align-items: center;
+}
+@media (min-width: 768px) { .burger-wrapper { top: 27px; } }
+.burger-wrapper .inner { padding-right: 20px; }
+@media (min-width: 768px) { .burger-wrapper .inner { padding-right: 40px; } }
+@media (min-width: 768px) { .burger-wrapper { display: none; } }
+
+.burger-btn {
+  width: 59px; height: 59px; border-radius: 50%; border: none; cursor: pointer;
+  display: flex; flex-direction: column; gap: 4px; align-items: center; justify-content: center;
+  background: #F4F1E8; transition: background 0.4s ease;
+}
+.burger-btn:hover { background: #0B0B0B; }
+.burger-btn .bar {
+  display: block; width: 24px; height: 2px; background: #111111;
+  transition: all 0.3s ease;
+}
+.burger-btn:hover .bar { background: #F4F1E8; }
+.burger-btn.open { background: #0B0B0B; }
+.burger-btn.open .bar { background: #F4F1E8; }
+.burger-btn.open .bar:first-child { transform: rotate(45deg) translate(2px, 2px); }
+.burger-btn.open .bar:last-child { transform: rotate(-45deg) translate(2px, -2px); }
+
+/* ===== MENU PANEL ===== */
+.menu-panel {
+  position: fixed; z-index: 9;
+  left: 8px; right: 8px;
+  border-radius: 20px;
+  background: rgba(17,17,17,0.95);
+  backdrop-filter: blur(26px); -webkit-backdrop-filter: blur(26px);
+  padding: 90px 32px 32px 32px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  transition: top 0.5s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.4s ease;
+  top: -600px; opacity: 0; pointer-events: none;
+}
+@media (min-width: 768px) {
+  .menu-panel { left: auto; right: 7px; width: 420px; padding: 60px; }
+}
+.menu-panel.open { top: 0; opacity: 1; pointer-events: auto; }
+@media (min-width: 768px) { .menu-panel.open { top: 7px; } }
+
+.menu-panel nav { display: flex; flex-direction: column; gap: 8px; }
+.menu-panel nav a {
+  color: #F4F1E8; font-size: 36px; font-weight: 500; text-decoration: none;
+  line-height: 130%; transition: opacity 0.3s ease;
+}
+@media (min-width: 768px) { .menu-panel nav a { font-size: 42px; } }
+.menu-panel nav a:hover { opacity: 0.7; }
+
+.menu-contact { display: flex; flex-direction: column; gap: 20px; margin-top: 32px; }
+.menu-email { color: #9A9590; font-size: 18px; text-decoration: none; transition: color 0.3s ease; }
+@media (min-width: 768px) { .menu-email { font-size: 20px; } }
+.menu-email:hover { color: #F4F1E8; }
+.menu-socials { display: flex; gap: 24px; }
+.menu-socials a {
+  color: #9A9590; font-size: 14px; text-decoration: underline;
+  text-underline-offset: 2px; transition: color 0.3s ease;
+}
+.menu-socials a:hover { color: #F4F1E8; }
+
+/* ===== GRID PAGE ===== */
+.grid-page {
+  max-width: 1760px; margin: 0 auto;
+  padding: 150px 16px 120px 16px;
+}
+@media (min-width: 768px) { .grid-page { padding: 190px 40px 140px 40px; } }
+
+.grid-title {
+  font-weight: 700; color: #F4F1E8;
+  font-size: clamp(32px, 6vw, 56px);
+  letter-spacing: -0.02em; margin-bottom: 48px;
+}
+
+/* ===== MASONRY ===== */
+.masonry-list {
+  position: relative;
+  width: 100%;
+  min-height: 200px;
+}
+
+.masonry-item {
+  position: absolute;
+  top: 0; left: 0;
+  will-change: transform, width, height, opacity, filter;
+  padding: 8px;
+  cursor: pointer;
+  text-decoration: none; color: inherit;
+}
+
+.masonry-item-img {
+  position: relative;
+  width: 100%; height: 100%;
+  background-size: cover; background-position: center;
+  border-radius: 10px;
+  box-shadow: 0 14px 34px -10px rgba(0,0,0,0.28);
+  overflow: hidden;
+}
+
+.masonry-caption {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 28px 14px 12px 14px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.55) 100%);
+  color: #F4F1E8; font-size: 13px; font-weight: 500;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ===== MAGIC BENTO hover interaction (spotlight / border glow / tilt / magnetism) ===== */
+:root { --glow-color: 255, 244, 224; } /* warm white light, not golden */
+
+.masonry-item-img {
+  --glow-x: 50%; --glow-y: 50%; --glow-intensity: 0; --glow-radius: 260px;
+  transform-style: preserve-3d;
+}
+
+.masonry-item-img::after {
+  content: '';
+  position: absolute; inset: 0; padding: 5px;
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.95)) 0%,
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.5)) 35%,
+    transparent 65%
+  );
+  border-radius: inherit;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.global-spotlight {
+  position: fixed; width: 700px; height: 700px; border-radius: 50%;
+  pointer-events: none; z-index: 200; opacity: 0;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  will-change: transform, opacity;
+  /* "farthest-side" so the gradient's own fade-to-transparent lines up with
+     the element's visible circular edge — the default farthest-corner
+     sizing was getting hard-clipped by border-radius before it finished
+     fading, which read as a sharp ring at the boundary. */
+  background: radial-gradient(circle farthest-side,
+    rgba(var(--glow-color), 0.35) 0%,
+    rgba(var(--glow-color), 0.24) 18%,
+    rgba(var(--glow-color), 0.15) 32%,
+    rgba(var(--glow-color), 0.09) 46%,
+    rgba(var(--glow-color), 0.05) 60%,
+    rgba(var(--glow-color), 0.022) 75%,
+    rgba(var(--glow-color), 0.008) 88%,
+    transparent 100%
+  );
+}
+
+/* ===== REDUCED MOTION ===== */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    animation: none !important; opacity: 1 !important; transform: none !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="nav-backdrop"></div>
+
+<!-- BACK -->
+<div class="logo-wrapper">
+  <div class="inner">
+    <a href="/#work" class="back-link" aria-label="Back to Portfolio">&larr; Back</a>
+  </div>
+</div>
+
+<!-- DESKTOP NAV -->
+<nav class="nav-links">
+  <a href="/#home">Home</a>
+  <a href="/#about">About</a>
+  <a href="/#work" class="nav-current" aria-current="page">
+    <span class="nav-current-circle" aria-hidden="true">
+      <svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8,26 C6,12 30,4 52,5 C76,6 94,13 92,26 C90,40 66,46 44,45 C20,44 10,38 8,26 Z" fill="none" stroke="#C0392B" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </span>
+    Work
+  </a>
+  <a href="/#contact">Contact</a>
+</nav>
+
+<!-- BURGER -->
+<div class="burger-wrapper">
+  <div class="inner">
+    <button class="burger-btn" id="burger-btn" aria-label="Open menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+  </div>
+</div>
+
+<!-- MENU PANEL -->
+<div class="menu-panel" id="menu-panel">
+  <nav>
+    <a href="/#home">Home</a>
+    <a href="/#about">About</a>
+    <a href="/#work">Work</a>
+    <a href="/#contact">Contact</a>
+  </nav>
+  <div class="menu-contact">
+    <a href="mailto:liushijia0227@163.com" class="menu-email">liushijia0227@163.com</a>
+    <div class="menu-socials">
+      <a href="tel:+61411490491">+61 0411 490 491</a>
+      <a href="#">Melbourne, Australia</a>
+    </div>
+  </div>
+  <div style="margin-top:32px;">
+    <button class="menu-cta-btn" onclick="location.href='mailto:liushijia0227@163.com'">
+      <span class="menu-cta-bg"></span>
+      <span class="menu-cta-text">Contact me</span>
+      <span class="menu-cta-circle">
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 13L13 5M13 5H6M13 5V12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </button>
+  </div>
+</div>
+
+<!-- GRID -->
+<main class="grid-page">
+  <h1 class="grid-title fade-in">All Projects</h1>
+  <div class="masonry-list" id="masonry-list"></div>
+</main>
+
+<script>
+(function() {
+  // ---- Masonry (vanilla JS + GSAP port of the React Bits <Masonry/> component) ----
+  const container = document.getElementById('masonry-list');
+
+  const items = PROJECTS.map(function (p) {
+    return {
+      id: p.id,
+      title: p.title,
+      img: p.gridImage || p.image,
+      tint: p.borderColor,
+      ratio: 1.25, // placeholder until the real image loads and reports its aspect ratio
+    };
+  });
+
+  function getColumns() {
+    const w = window.innerWidth;
+    if (w >= 1500) return 4;
+    if (w >= 1000) return 3;
+    if (w >= 600) return 2;
+    return 1;
+  }
+
+  // Column assignment is round-robin by index (col = i % columns), so the
+  // reading order always matches the PROJECTS array order (i.e. the
+  // numbering in the source folder). Each column then packs its own items
+  // back-to-back with no gap, giving the staggered masonry look without
+  // the shortest-column pack reshuffling items unpredictably.
+  function computeGrid(containerWidth, columns) {
+    const columnWidth = containerWidth / columns;
+    const colHeights = new Array(columns).fill(0);
+    return items.map(function (item, i) {
+      const col = i % columns;
+      const h = columnWidth * item.ratio;
+      const y = colHeights[col];
+      colHeights[col] += h;
+      return Object.assign({}, item, { x: columnWidth * col, y: y, w: columnWidth, h: h });
+    });
+  }
+
+  function loadImageRatio(src) {
+    return new Promise(function (resolve) {
+      const img = new Image();
+      img.onload = function () { resolve(img.naturalHeight / img.naturalWidth); };
+      img.onerror = function () { resolve(null); };
+      img.src = src;
+    });
+  }
+
+  // Each tile uses its image's real aspect ratio, so the grid keeps the
+  // uneven, varied rhythm of true masonry rather than a uniform crop.
+  function preloadImages(entries) {
+    return Promise.all(entries.map(function (item) {
+      return loadImageRatio(item.img).then(function (ratio) {
+        if (ratio) item.ratio = ratio;
+      });
+    })).then(function () {
+      // Project 2 pairs visually with project 3, but a bit narrower still —
+      // taller tile so cover-cropping trims the sides.
+      const p2 = entries.find(function (i) { return i.id === 2; });
+      const p3 = entries.find(function (i) { return i.id === 3; });
+      if (p2 && p3) p2.ratio = p3.ratio * 1.2;
+
+      // The pink axonometric (project 10's grid image) reads too loud at
+      // full height — shorten the tile further so cover-cropping trims more
+      // off the top and bottom.
+      const p10 = entries.find(function (i) { return i.id === 10; });
+      if (p10) p10.ratio *= 0.8 * 0.85;
+
+      // Project 7 (cracow) is a wide aerial shot — taller tile so
+      // cover-cropping trims the sides and it reads narrower.
+      const p7 = entries.find(function (i) { return i.id === 7; });
+      if (p7) p7.ratio *= 1.25;
+
+      // Project 9 stacks under project 8 — taller tile so cover-cropping
+      // trims the sides and it reads narrower, matching that column.
+      const p9 = entries.find(function (i) { return i.id === 9; });
+      if (p9) p9.ratio *= 1.25;
+    });
+  }
+
+  // ---- MagicBento-style hover interaction (vanilla JS + GSAP port) ----
+  const GLOW_COLOR = '255, 244, 224';
+  const SPOTLIGHT_RADIUS = 300;
+  const isTouchDevice = window.matchMedia('(hover: none)').matches;
+
+  function attachBentoInteractions(cardLink, cardEl) {
+    if (isTouchDevice) return; // skip on touch — no hover/cursor to react to
+
+    let magnetTween = null;
+
+    cardLink.addEventListener('mousemove', function (e) {
+      const rect = cardEl.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const cx = rect.width / 2, cy = rect.height / 2;
+
+      // tilt
+      gsap.to(cardEl, {
+        rotateX: ((y - cy) / cy) * -8,
+        rotateY: ((x - cx) / cx) * 8,
+        duration: 0.15, ease: 'power2.out', transformPerspective: 700,
+      });
+      // magnetism
+      magnetTween = gsap.to(cardEl, {
+        x: (x - cx) * 0.06, y: (y - cy) * 0.06,
+        duration: 0.3, ease: 'power2.out',
+      });
+    });
+
+    cardLink.addEventListener('mouseleave', function () {
+      if (magnetTween) magnetTween.kill();
+      gsap.to(cardEl, { rotateX: 0, rotateY: 0, x: 0, y: 0, duration: 0.35, ease: 'power2.out' });
+    });
+
+    // Ripple, then navigate — a plain <a> click would jump to the detail
+    // page immediately and the ripple would never get a chance to render.
+    cardLink.addEventListener('click', function (e) {
+      e.preventDefault();
+      const rect = cardEl.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const maxDist = Math.max(
+        Math.hypot(x, y), Math.hypot(x - rect.width, y),
+        Math.hypot(x, y - rect.height), Math.hypot(x - rect.width, y - rect.height)
+      );
+      const ripple = document.createElement('div');
+      ripple.style.cssText =
+        'position:absolute;border-radius:50%;pointer-events:none;z-index:6;' +
+        'width:' + (maxDist * 2) + 'px;height:' + (maxDist * 2) + 'px;' +
+        'left:' + (x - maxDist) + 'px;top:' + (y - maxDist) + 'px;' +
+        'background:radial-gradient(circle, rgba(' + GLOW_COLOR + ',0.5) 0%, rgba(' + GLOW_COLOR + ',0.25) 30%, transparent 70%);';
+      cardEl.appendChild(ripple);
+      gsap.fromTo(ripple, { scale: 0, opacity: 1 }, { scale: 1, opacity: 0, duration: 0.5, ease: 'power2.out' });
+
+      const href = cardLink.href;
+      setTimeout(function () { location.href = href; }, 260);
+    });
+  }
+
+  // Global spotlight — one big glow that follows the cursor across the
+  // whole grid, plus a proximity-based border-glow on every card (not just
+  // the one directly under the cursor), matching the source component.
+  function setupGlobalSpotlight() {
+    if (isTouchDevice) return;
+    const spotlight = document.createElement('div');
+    spotlight.className = 'global-spotlight';
+    document.body.appendChild(spotlight);
+    const proximity = SPOTLIGHT_RADIUS * 0.5;
+    const fadeDistance = SPOTLIGHT_RADIUS * 0.75;
+
+    // Spotlight is only active within the grid's own bounds again — moving
+    // the mouse elsewhere on the page hides it.
+    document.addEventListener('mousemove', function (e) {
+      const rect = container.getBoundingClientRect();
+      const inside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+      const cards = container.querySelectorAll('.masonry-item-img');
+
+      if (!inside) {
+        gsap.to(spotlight, { opacity: 0, duration: 0.3, ease: 'power2.out' });
+        cards.forEach(function (c) { c.style.setProperty('--glow-intensity', '0'); });
+        return;
+      }
+
+      cards.forEach(function (card) {
+        const r = card.getBoundingClientRect();
+        const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const dist = Math.max(0, Math.hypot(e.clientX - cx, e.clientY - cy) - Math.max(r.width, r.height) / 2);
+
+        let glow = 0;
+        if (dist <= proximity) glow = 1;
+        else if (dist <= fadeDistance) glow = (fadeDistance - dist) / (fadeDistance - proximity);
+
+        card.style.setProperty('--glow-x', ((e.clientX - r.left) / r.width * 100) + '%');
+        card.style.setProperty('--glow-y', ((e.clientY - r.top) / r.height * 100) + '%');
+        card.style.setProperty('--glow-intensity', glow.toString());
+        card.style.setProperty('--glow-radius', SPOTLIGHT_RADIUS + 'px');
+      });
+
+      gsap.to(spotlight, { left: e.clientX, top: e.clientY, duration: 0.1, ease: 'power2.out' });
+      gsap.to(spotlight, { opacity: 0.85, duration: 0.2, ease: 'power2.out' });
+    });
+  }
+
+  let hasMounted = false;
+
+  function layout() {
+    const columns = getColumns();
+    const width = container.getBoundingClientRect().width;
+    if (!width) return;
+    const grid = computeGrid(width, columns);
+
+    const maxHeight = Math.max.apply(null, grid.map(function (g) { return g.y + g.h; }));
+    container.style.height = maxHeight + 'px';
+
+    grid.forEach(function (item, index) {
+      let el = container.querySelector('[data-key="' + item.id + '"]');
+      const animProps = { x: item.x, y: item.y, width: item.w, height: item.h };
+
+      if (!el) {
+        el = document.createElement('a');
+        el.className = 'masonry-item';
+        el.dataset.key = item.id;
+        el.href = '/project-detail.html?id=' + item.id;
+
+        const imgEl = document.createElement('div');
+        imgEl.className = 'masonry-item-img';
+        imgEl.style.backgroundImage = "url('" + item.img + "')";
+        imgEl.style.backgroundColor = item.tint;
+
+        const caption = document.createElement('div');
+        caption.className = 'masonry-caption';
+        caption.textContent = item.title;
+        imgEl.appendChild(caption);
+
+        el.appendChild(imgEl);
+        attachBentoInteractions(el, imgEl);
+        container.appendChild(el);
+
+        if (!hasMounted) {
+          gsap.set(el, { opacity: 0, x: item.x, y: window.innerHeight + 200, width: item.w, height: item.h, filter: 'blur(10px)' });
+        }
+      }
+
+      if (!hasMounted) {
+        gsap.to(el, Object.assign({
+          opacity: 1,
+          filter: 'blur(0px)',
+          duration: 0.8,
+          ease: 'power3.out',
+          delay: index * 0.06,
+        }, animProps));
+      } else {
+        gsap.to(el, Object.assign({ duration: 0.6, ease: 'power3.out', overwrite: 'auto' }, animProps));
+      }
+    });
+
+    hasMounted = true;
+  }
+
+  setupGlobalSpotlight();
+  preloadImages(items).then(layout);
+
+  let resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(layout, 200);
+  });
+
+  // Burger menu toggle
+  const burgerBtn = document.getElementById('burger-btn');
+  const menuPanel = document.getElementById('menu-panel');
+  let menuOpen = false;
+  burgerBtn.addEventListener('click', function() {
+    menuOpen = !menuOpen;
+    if (menuOpen) {
+      burgerBtn.classList.add('open');
+      menuPanel.classList.add('open');
+      burgerBtn.setAttribute('aria-label', 'Close menu');
+    } else {
+      burgerBtn.classList.remove('open');
+      menuPanel.classList.remove('open');
+      burgerBtn.setAttribute('aria-label', 'Open menu');
+    }
+  });
+  menuPanel.querySelectorAll('nav a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      menuOpen = false;
+      burgerBtn.classList.remove('open');
+      menuPanel.classList.remove('open');
+    });
+  });
+})();
+</script>
+</body>
+</html>

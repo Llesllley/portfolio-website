@@ -1,0 +1,155 @@
+// Shared project list — used by the Work marquee, the all-projects grid,
+// and the project detail page. Edit titles here once real names are ready;
+// everything downstream picks them up automatically.
+//
+// `image` = portrait cover crop (book marquee + detail-page fallback).
+// `gridImage` = separate landscape crop used only on the all-projects grid.
+// `type`, `site`, `roles`, `description` and `boards` are optional — when
+// present, the detail page renders the full case study (intro + board
+// images). Projects without them just show title + cover image.
+const PROJECTS = [
+  {
+    id: 1,
+    title: 'Roots and Horizons',
+    image: '/covers/cover-01.jpg',
+    gridImage: '/grid/grid-01.jpg',
+    borderColor: '#2b2f28',
+    type: 'Group Work with Dou Han',
+    site: 'Danba, Sichuan, China',
+    roles: 'Architecture Design, Analysis, Research Drawings, Rendering, Technical Drawings',
+    description: [
+      "Situated in a Jiarong Tibetan community in western Sichuan, this project aims to create a shared space for local residents and tourists to coexist, interact, and learn from one another. Rooted in the rhythms of local life, the design incorporates dedicated workspaces and living areas for artisans, supporting traditional crafts like weaving, dyeing, and woodworking. These spaces provide both production facilities and a setting for cultural preservation.",
+      "The spatial arrangement emphasizes connection and exchange, with a central communal plaza serving as a vital hub for gathering and interaction. Surrounding volumes balance public, semi-public, and private areas, encouraging natural movement and fostering meaningful encounters between locals and visitors.",
+      "Blending cultural preservation with contemporary design, the project aspires to bridge past and future, locals and visitors, and culture and nature. It functions as both a community hub and a platform for mutual understanding, promoting the sustainable development of local heritage in a modern context.",
+    ],
+    boards: ['/case-studies/case-01-1.jpg', '/case-studies/case-01-2.jpg', '/case-studies/case-01-3.jpg', '/case-studies/case-01-4.jpg', '/case-studies/case-01-5.jpg'],
+  },
+  {
+    id: 2,
+    title: 'Urban Sanctuary for Wings',
+    image: '/covers/cover-02.jpg',
+    gridImage: '/grid/grid-02.jpg',
+    borderColor: '#262626',
+    type: 'Individual Work',
+    site: 'Chicago, IL, USA',
+    description: [
+      "As urbanization accelerates, glass buildings are increasing in cities, leading to more bird collisions. Transparent and reflective glass often deceives birds into thinking there is open space, causing millions of fatalities each year and disrupting ecosystems.",
+      "This project seeks to reduce bird-glass collisions by adding metal structures to building exteriors. These not only prevent strikes but also create soft light and shadow effects, enhancing interior comfort. The design helps birds better recognize buildings and includes lighting controls and vegetation to reduce nighttime collisions.",
+      "More than just solving bird strikes, this project promotes a new architectural philosophy that emphasizes ecological responsibility. By integrating nature into urban spaces and prioritizing bird safety through sustainable design elements like vegetation and lighting systems, it encourages harmonious coexistence with wildlife. This approach aims to reduce the impact of human activity on both birds and the broader ecosystem.",
+    ],
+    boards: ['/case-studies/case-02-1.jpg', '/case-studies/case-02-2.jpg', '/case-studies/case-02-3.jpg', '/case-studies/case-02-4.jpg', '/case-studies/case-02-5.jpg'],
+  },
+  {
+    id: 3,
+    title: 'Rebirth Skyscraper',
+    image: '/covers/cover-03.jpg',
+    gridImage: '/grid/grid-03.jpg',
+    borderColor: '#0c201e',
+    type: 'Group Work with Han Dou, Jieyao Liu',
+    site: 'Great Barrier Reef, Queensland, Australia',
+    roles: 'Architecture Design, Analysis, Research Drawings, Rendering, Technical Drawings',
+    description: [
+      "Ocean acidification, driven by excess carbon dioxide absorption, poses a significant threat to marine life, including coral reefs. Human activities have accelerated this process, leading to more frequent and severe coral bleaching, which weakens coral ecosystems and threatens biodiversity.",
+      "Our project is situated in the Great Barrier Reef, a critical but endangered marine habitat. Over the past 30 years, nearly half of the coral in this region has been lost due to overexploitation, pollution, and climate change.",
+      "This design fosters coral restoration and seawater deacidification by supporting algae and coral growth. By leveraging natural processes such as carbon dioxide absorption and photosynthesis, the structure helps create a self-sustaining, stable ecosystem that aids in restoring the marine environment.",
+    ],
+    boards: ['/case-studies/case-03-1.jpg', '/case-studies/case-03-2.jpg', '/case-studies/case-03-3.jpg', '/case-studies/case-03-4.jpg', '/case-studies/case-03-5.jpg'],
+  },
+  {
+    id: 4,
+    title: 'House of Natural Dreams',
+    image: '/covers/cover-04.jpg',
+    gridImage: '/grid/grid-04.jpg',
+    borderColor: '#13200d',
+    type: 'Individual Work',
+    site: 'Farsund, Agder, Norway',
+    description: [
+      "After studying Eliasson's works and life, I have developed a strong curiosity about the connection between his life and art, the interplay between his experiences and creations, and how this intertwining of art and life will continue. Although Olafur Eliasson has never explicitly stated how the presence of nature and its memories in his works reflect his identity, I can faintly perceive traces of his personal journey shaping his artistic language.",
+      "I envision this house as a self-portrait of Eliasson in his later years. Unlike the relationship between art and artist, the connection between a house and its occupant is more intimate and personal. A house is healing, protective, and warm—qualities that align with its fundamental role in architecture. It defines the boundary between humanity and nature while opening a window for dialogue and connection.",
+      "What would Olafur Eliasson's home in his twilight years look like? This design allows viewers to see his life journey while expressing my interpretation of how he might continue shaping his story. It reflects the profound relationship between nature, memory, and creativity in his life and work.",
+    ],
+    boards: ['/case-studies/case-05-1.jpg', '/case-studies/case-05-2.jpg', '/case-studies/case-05-3.jpg', '/case-studies/case-05-4.jpg'],
+  },
+  {
+    id: 5,
+    title: 'Weather Classroom',
+    image: '/covers/cover-05.jpg',
+    gridImage: '/grid/grid-05.jpg',
+    borderColor: '#242424',
+    type: 'Individual Work',
+    site: 'Balnarring Beach, VIC, Australia',
+    description: [
+      "Weather Classroom is a sequence of outdoor learning spaces for Bush Kinder at Campsite C, Balnarring Beach. Instead of designing an enclosed classroom, the project creates places for arrival, gathering, eating, making, sheltering, walking, and returning. It explores how children can learn from Country through wind, rain, planting, ground, and repeated outdoor experience.",
+      "The project developed from walking, camping, meditation, and field observation. Weather and vegetation are treated not as background, but as active conditions that shape occupation. A wind pavilion makes wind visible through a moving fabric roof; rain shelters allow children to hear, see, and stay with rain; a gathering circle supports shared stories and end-of-year camp; and a planted threshold slows the transition from everyday arrival into outdoor learning.",
+      "Over time, planting gradually thickens around the shelters and paths. Human activity remains, but becomes more careful and selective as the landscape takes a stronger role in shaping movement and occupation. The project therefore works across daily use, seasonal change, and long-term growth.",
+    ],
+    boards: ['/case-studies/weather-classroom-1.jpg', '/case-studies/weather-classroom-2.jpg', '/case-studies/weather-classroom-3.jpg', '/case-studies/weather-classroom-4.jpg', '/case-studies/weather-classroom-5.jpg', '/case-studies/weather-classroom-6.jpg', '/case-studies/weather-classroom-7.jpg', '/case-studies/weather-classroom-8.jpg'],
+  },
+  {
+    id: 6,
+    title: 'Reclaiming the Ground',
+    image: '/covers/cover-06.jpg',
+    gridImage: '/grid/grid-06.jpg',
+    borderColor: '#2a2722',
+    type: 'Group Work with Han Dou',
+    site: 'Baiyun Road, Hexi District, Tianjin, China',
+    description: [
+      "Aging residential districts often face fragmented green spaces, insufficient public facilities, and increasing pressure from traffic and parking. In the Baiyun Road residential area, car-oriented infrastructure occupies a large amount of ground space, limiting pedestrian movement and reducing opportunities for community interaction, particularly for elderly residents.",
+      "This project explores how artificial intelligence, autonomous vehicles, and automated parking systems could support the regeneration of an existing neighbourhood. By relocating parking and part of the vehicle circulation underground, the design releases ground-level space for continuous green corridors, pedestrian paths, public facilities, and recreational areas. Autonomous shuttle routes, mobility hubs, and pedestrian bridges reconnect the previously separated residential blocks.",
+      "Rather than treating technology as a visible symbol of the future, the project uses it as an underlying infrastructure to improve everyday life. By returning the ground to people and nature, the proposal transforms a fragmented aging neighbourhood into a safer, greener, and more inclusive community while preserving its existing residential fabric.",
+    ],
+    boards: ['/case-studies/reclaiming-ground-1.jpg', '/case-studies/reclaiming-ground-2.jpg', '/case-studies/reclaiming-ground-3.jpg', '/case-studies/reclaiming-ground-4.jpg', '/case-studies/reclaiming-ground-5.jpg'],
+  },
+  {
+    id: 7,
+    title: 'Construction Documentation',
+    image: '/covers/cover-07.jpg',
+    gridImage: '/grid/grid-07.jpg',
+    borderColor: '#242424',
+    type: 'Internship Training',
+    site: 'Tianjin, China',
+    description: [
+      "Completed a full set of architectural construction drawings during my internship, including plans, elevations, sections, stair details, façade details, and door/window schedules. This experience strengthened my understanding of construction standards, technical detailing, and architectural documentation.",
+    ],
+    boards: ['/case-studies/construction-documentation-1.jpg', '/case-studies/construction-documentation-2.jpg', '/case-studies/construction-documentation-3.jpg', '/case-studies/construction-documentation-4.jpg', '/case-studies/construction-documentation-5.jpg', '/case-studies/construction-documentation-6.jpg'],
+  },
+  {
+    id: 8,
+    title: 'Art Gallery',
+    image: '/covers/cover-08.jpg',
+    gridImage: '/grid/grid-08.jpg',
+    borderColor: '#1c2228',
+    type: 'Individual Work',
+    site: 'Kraków, Poland',
+    description: [
+      "A public library designed to encourage community interaction through open reading spaces and flexible circulation.",
+    ],
+    boards: ['/case-studies/art-gallery-1.jpg', '/case-studies/art-gallery-2.jpg', '/case-studies/art-gallery-3.jpg', '/case-studies/art-gallery-4.jpg', '/case-studies/art-gallery-5.jpg', '/case-studies/art-gallery-6.jpg', '/case-studies/art-gallery-7.jpg', '/case-studies/art-gallery-8.jpg', '/case-studies/art-gallery-9.jpg'],
+  },
+  {
+    id: 9,
+    title: 'Mediatheque Nowa Huta',
+    image: '/covers/cover-09.jpg',
+    gridImage: '/grid/grid-09.jpg',
+    borderColor: '#3d1428',
+    type: 'Individual Work',
+    site: 'Kraków, Poland',
+    description: [
+      "A public library designed to encourage community interaction through open reading spaces and flexible circulation.",
+    ],
+    boards: ['/case-studies/mediatheque-nowa-huta-1.jpg', '/case-studies/mediatheque-nowa-huta-2.jpg', '/case-studies/mediatheque-nowa-huta-3.jpg', '/case-studies/mediatheque-nowa-huta-4.jpg', '/case-studies/mediatheque-nowa-huta-5.jpg', '/case-studies/mediatheque-nowa-huta-6.jpg'],
+  },
+  {
+    id: 10,
+    title: 'Private House Design',
+    image: '/covers/cover-10.jpg',
+    gridImage: '/grid/grid-10.jpg',
+    borderColor: '#16222f',
+    type: 'Individual Work',
+    site: 'Kraków, Poland',
+    description: [
+      "A conceptual residential design exploring spatial composition, circulation, and architectural form. The project includes site planning, plans, elevations, sections, construction details, and 3D visualizations, demonstrating a complete design workflow from concept development to technical representation.",
+    ],
+    boards: ['/case-studies/private-house-1.jpg', '/case-studies/private-house-2.jpg', '/case-studies/private-house-3.jpg', '/case-studies/private-house-4.jpg'],
+  },
+];

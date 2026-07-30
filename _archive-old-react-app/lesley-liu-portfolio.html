@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesley Liu — Architecture Portfolio</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --ink: #1a1a18;
+    --muted: #6b6b64;
+    --line: #dcdcd6;
+    --accent: #b5482f;
+    --panel: #f0f0eb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.5;
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+  /* Nav */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(250,250,248,0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav.wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 20px; padding-bottom: 20px;
+  }
+  .logo { font-weight: 700; font-size: 18px; letter-spacing: 0.02em; }
+  .navlinks { display: flex; gap: 32px; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; }
+  .navlinks a { color: var(--muted); transition: color .2s; }
+  .navlinks a:hover { color: var(--ink); }
+
+  /* Hero */
+  .hero {
+    padding: 100px 0 80px;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero h1 {
+    font-size: clamp(40px, 7vw, 72px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    max-width: 850px;
+  }
+  .hero p {
+    margin-top: 24px;
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 520px;
+  }
+  .hero .tag {
+    display: inline-block;
+    margin-bottom: 20px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* Section headings */
+  section { padding: 90px 0; border-bottom: 1px solid var(--line); }
+  section:last-of-type { border-bottom: none; }
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 48px; flex-wrap: wrap; gap: 12px;
+  }
+  .section-head h2 {
+    font-size: 32px; letter-spacing: -0.01em;
+  }
+  .section-head .count { color: var(--muted); font-size: 14px; }
+
+  /* Project grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+  .project {
+    display: block;
+    cursor: default;
+  }
+  .thumb {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 2px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: flex-end;
+    padding: 18px;
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .thumb.t1 { background: linear-gradient(135deg,#3b3a35,#8a8578); }
+  .thumb.t2 { background: linear-gradient(135deg,#5c4a3a,#c9a878); }
+  .thumb.t3 { background: linear-gradient(135deg,#2e3a36,#6f9188); }
+  .thumb.t4 { background: linear-gradient(135deg,#4a3b4d,#a988a3); }
+  .project h3 { font-size: 20px; margin-bottom: 6px; }
+  .project .meta { color: var(--muted); font-size: 14px; }
+  .project .desc { margin-top: 10px; font-size: 15px; color: #444; max-width: 46ch; }
+
+  /* Resume / About */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 64px;
+  }
+  .about-grid p { color: #3a3a36; margin-bottom: 16px; max-width: 52ch; }
+  .cv-block h4 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--muted); margin-bottom: 16px; margin-top: 28px;
+  }
+  .cv-block h4:first-child { margin-top: 0; }
+  .cv-item { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+  .cv-item .role { font-weight: 600; }
+  .cv-item .org { color: var(--muted); }
+  .cv-item .yr { color: var(--muted); font-size: 13px; white-space: nowrap; }
+  .download-btn {
+    display: inline-block; margin-top: 28px;
+    padding: 12px 24px;
+    border: 1px solid var(--ink);
+    font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase;
+    transition: background .2s, color .2s;
+  }
+  .download-btn:hover { background: var(--ink); color: var(--bg); }
+
+  /* Contact */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .contact-grid h2 { font-size: 40px; letter-spacing: -0.01em; max-width: 12ch; }
+  .contact-list { font-size: 16px; }
+  .contact-list div { padding: 14px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+  .contact-list span:first-child { color: var(--muted); }
+
+  footer {
+    padding: 32px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 760px) {
+    .grid, .about-grid, .contact-grid { grid-template-columns: 1fr; }
+    .navlinks { display: none; }
+    .hero { padding: 70px 0 56px; }
+    section { padding: 64px 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="logo">LESLEY LIU</div>
+    <div class="navlinks">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="tag">Architecture &amp; Design</div>
+    <h1>Buildings and spaces shaped by context, material, and light.</h1>
+    <p>I'm an architect working across residential, cultural, and adaptive-reuse projects. This is a placeholder introduction — swap in your own practice statement.</p>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Selected Work</h2>
+      <span class="count">04 projects</span>
+    </div>
+    <div class="grid">
+      <div class="project">
+        <div class="thumb t1">Image placeholder</div>
+        <h3>Project Title One</h3>
+        <div class="meta">Residential · City, Country · 2024</div>
+        <p class="desc">Placeholder description — replace with a short summary of the project's concept, scale, and your role.</p>
+      </div>
+      <div class="project">
+        <div class="thumb t2">Image placeholder</div>
+        <h3>Project Title Two</h3>
+        <div class="meta">Cultural · City, Country · 2023</div>
+        <p class="desc">Placeholder description — replace with a short summary of the project's concept, scale, and your role.</p>
+      </div>
+      <div class="project">
+        <div class="thumb t3">Image placeholder</div>
+        <h3>Project Title Three</h3>
+        <div class="meta">Adaptive Reuse · City, Country · 2022</div>
+        <p class="desc">Placeholder description — replace with a short summary of the project's concept, scale, and your role.</p>
+      </div>
+      <div class="project">
+        <div class="thumb t4">Image placeholder</div>
+        <h3>Project Title Four</h3>
+        <div class="meta">Commercial · City, Country · 2021</div>
+        <p class="desc">Placeholder description — replace with a short summary of the project's concept, scale, and your role.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>About &amp; CV</h2>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p>Placeholder bio — a few sentences on your background, design philosophy, and the kind of work you're drawn to. Mention your training, years of practice, and any focus areas (sustainability, urbanism, materiality, etc.).</p>
+        <p>Add a second paragraph on notable recognition, publications, or exhibitions if relevant.</p>
+        <a class="download-btn" href="#">Download Résumé (PDF)</a>
+      </div>
+      <div class="cv-block">
+        <h4>Experience</h4>
+        <div class="cv-item"><div><div class="role">Role Title</div><div class="org">Firm Name</div></div><div class="yr">2022–Present</div></div>
+        <div class="cv-item"><div><div class="role">Role Title</div><div class="org">Firm Name</div></div><div class="yr">2019–2022</div></div>
+        <h4>Education</h4>
+        <div class="cv-item"><div><div class="role">M.Arch</div><div class="org">University Name</div></div><div class="yr">2019</div></div>
+        <div class="cv-item"><div><div class="role">B.A. Architecture</div><div class="org">University Name</div></div><div class="yr">2016</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-grid">
+      <h2>Let's talk about a project.</h2>
+      <div class="contact-list">
+        <div><span>Email</span><span>lsjdeg@gmail.com</span></div>
+        <div><span>Phone</span><span>+1 (000) 000-0000</span></div>
+        <div><span>Location</span><span>City, Country</span></div>
+        <div><span>Instagram</span><span>@lesleyliu.arch</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>&copy; 2026 Lesley Liu. All rights reserved.</footer>
+
+</body>
+</html>
