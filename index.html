@@ -226,15 +226,6 @@ html, body {
 @media (min-width: 768px) { .hero-model { width: 64vw; height: 100vh; top: 0; bottom: auto; } }
 .hero-model canvas { display: block; width: 100%; height: 100%; }
 
-.hero-screenshot-btn {
-  position: absolute; z-index: 9; top: 20px; right: 20px;
-  border: 1px solid rgba(17,17,17,0.3); background: rgba(228,228,228,0.7);
-  backdrop-filter: blur(6px); color: #111111;
-  font-size: 13px; padding: 8px 16px; border-radius: 9999px;
-  cursor: pointer; transition: background 0.2s ease;
-}
-.hero-screenshot-btn:hover { background: rgba(228,228,228,0.95); }
-
 .hero-content {
   position: relative; z-index: 8;
   display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start;
@@ -360,6 +351,12 @@ html, body {
   font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #9A9590;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
 }
+
+/* Mobile-only tap arrows — inertial touch scrolling can't be reliably
+   intercepted mid-swipe the way desktop wheel events can, so touch
+   devices get a deliberate tap-to-advance control instead of relying on
+   swipe-jacking alone. */
+.avatar-hero-arrows { display: none; }
 .avatar-scroll-hint::after {
   content: ''; width: 1px; height: 24px; background: #9A9590;
   animation: scrollHintMove 1.6s ease-in-out infinite;
@@ -376,6 +373,19 @@ html, body {
   }
   .avatar-caption { height: 380px; }
   .avatar-skills { justify-content: flex-start; }
+
+  .avatar-hero-arrows {
+    display: flex; flex-direction: column; gap: 12px;
+    position: absolute; z-index: 3; right: 16px; top: 22%;
+  }
+  .avatar-arrow-btn {
+    width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(17,17,17,0.55); backdrop-filter: blur(8px);
+    color: #F4F1E8; transition: background 0.2s ease, opacity 0.2s ease;
+  }
+  .avatar-arrow-btn:active { background: rgba(11,11,11,0.8); }
+  .avatar-arrow-btn:disabled { opacity: 0.35; pointer-events: none; }
 }
 
 /* ===== WORK PAGE ===== */
@@ -700,7 +710,6 @@ html, body {
   <div class="hero-model hero-image-animate" id="hero-model">
     <canvas id="model-canvas"></canvas>
   </div>
-  <button class="hero-screenshot-btn" id="model-screenshot-btn">Take Screenshot</button>
 
   <div class="hero-content">
     <div class="hero-content-inner">
@@ -803,6 +812,18 @@ html, body {
       </div>
     </div>
     <div class="avatar-scroll-hint">Scroll</div>
+    <div class="avatar-hero-arrows">
+      <button class="avatar-arrow-btn" id="avatar-arrow-up" aria-label="Previous">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 15L12 8L19 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="avatar-arrow-btn" id="avatar-arrow-down" aria-label="Next">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 9L12 16L19 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
   </div>
 </section>
 
@@ -960,7 +981,6 @@ html, body {
 (function () {
   const container = document.getElementById('hero-model');
   const canvas = document.getElementById('model-canvas');
-  const screenshotBtn = document.getElementById('model-screenshot-btn');
   if (!container || !canvas) return;
 
   const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -1079,18 +1099,6 @@ html, body {
       if (e.pointerType !== 'mouse') return;
       target.x = (e.clientX / window.innerWidth) * 2 - 1;
       target.y = (e.clientY / window.innerHeight) * 2 - 1;
-    });
-  }
-
-  // ---- screenshot button ----
-  if (screenshotBtn) {
-    screenshotBtn.addEventListener('click', function () {
-      renderer.render(scene, camera);
-      const dataUrl = canvas.toDataURL('image/png');
-      const a = document.createElement('a');
-      a.download = 'scene.png';
-      a.href = dataUrl;
-      a.click();
     });
   }
 
@@ -1238,14 +1246,26 @@ html, body {
   }
   window.addEventListener('wheel', onWheel, { passive: false });
 
-  // Basic touch-swipe support mirroring the wheel behaviour.
+  // Basic touch-swipe support mirroring the wheel behaviour. This is a
+  // best-effort fallback, not the primary mobile interaction — once a
+  // touch gesture releases into inertial/momentum scrolling, the browser
+  // drives that natively and no further JS-observable events fire, so a
+  // fast flick can't be intercepted here. The tap arrows below are what
+  // actually make this reliable on touch devices.
   let touchStartY = null;
   window.addEventListener('touchstart', function (e) {
-    if (!heroIsPinned()) return;
-    touchStartY = e.touches[0].clientY;
+    touchStartY = heroIsPinned() ? e.touches[0].clientY : null;
   }, { passive: true });
   window.addEventListener('touchmove', function (e) {
-    if (touchStartY === null || !ready) return;
+    if (!ready) return;
+    if (touchStartY === null) {
+      // The finger went down before this section was pinned (e.g.
+      // starting the drag back up in Home) — start tracking the moment
+      // the drag actually reaches the pinned zone, rather than ignoring
+      // this gesture entirely.
+      if (heroIsPinned()) touchStartY = e.touches[0].clientY;
+      return;
+    }
     const dy = touchStartY - e.touches[0].clientY;
     if (Math.abs(dy) < 40) return; // swipe threshold
     const goingDown = dy > 0;
@@ -1257,6 +1277,21 @@ html, body {
     if (action === 'absorb' || animating) return;
     goToStop(currentStop + (goingDown ? 1 : -1));
   }, { passive: false });
+
+  // Primary mobile interaction: deliberate tap arrows, since swipe
+  // gestures can't be reliably intercepted once they become momentum
+  // scrolling. These don't go through the arrival-settle logic (a tap
+  // is already an unambiguous, deliberate input).
+  const arrowUp = document.getElementById('avatar-arrow-up');
+  const arrowDown = document.getElementById('avatar-arrow-down');
+  function tapStep(goingDown) {
+    if (!ready || animating) return;
+    const atEdge = (goingDown && currentStop >= SHOT_COUNT - 1) || (!goingDown && currentStop <= 0);
+    if (atEdge) { exitTo(goingDown); return; }
+    goToStop(currentStop + (goingDown ? 1 : -1));
+  }
+  if (arrowUp) arrowUp.addEventListener('click', function () { tapStep(false); });
+  if (arrowDown) arrowDown.addEventListener('click', function () { tapStep(true); });
 
   video.addEventListener('loadedmetadata', function () {
     ready = true;
