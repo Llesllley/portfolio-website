@@ -398,14 +398,27 @@ html, body {
 
 .work-title {
   position: absolute; top: 130px; left: 16px;
-  font-weight: 700; color: #F4F1E8;
-  font-size: clamp(64px, 14vw, 200px);
-  letter-spacing: -0.02em; line-height: 0.9;
-  white-space: nowrap; z-index: 1;
+  display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
+  z-index: 1;
   user-select: none; text-decoration: none;
   cursor: pointer; transition: opacity 0.25s ease;
 }
 .work-title:hover { opacity: 0.8; }
+.work-title-text {
+  font-weight: 700; color: #F4F1E8;
+  font-size: clamp(64px, 14vw, 200px);
+  letter-spacing: -0.02em; line-height: 0.9;
+  white-space: nowrap;
+}
+/* Without this the big "Portfolio" wordmark just reads as a page
+   heading — nothing suggests it's actually a link to the full grid. */
+.work-title-hint {
+  font-size: 14px; font-weight: 500; letter-spacing: 0.01em;
+  color: rgba(244,241,232,0.65);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.work-title-hint svg { transition: transform 0.25s ease; }
+.work-title:hover .work-title-hint svg { transform: translateX(4px); }
 @media (min-width: 768px) { .work-title { left: 40px; } }
 
 :root {
@@ -514,7 +527,8 @@ html, body {
 
 @media (max-width: 768px) {
   :root { --book-overlap: 90px; --hover-push: 45px; }
-  .work-title { top: 100px; font-size: clamp(56px, 20vw, 140px); }
+  .work-title { top: 100px; }
+  .work-title-text { font-size: clamp(56px, 20vw, 140px); }
   .marquee-mask { top: 58%; height: calc(200px + 30vw); }
   .book-wrap { width: 140px; height: 200px; }
   .book { height: 200px; }
@@ -525,7 +539,8 @@ html, body {
 
 @media (max-width: 480px) {
   :root { --book-overlap: 70px; --hover-push: 30px; }
-  .work-title { top: 80px; font-size: clamp(40px, 16vw, 100px); }
+  .work-title { top: 80px; }
+  .work-title-text { font-size: clamp(40px, 16vw, 100px); }
   .marquee-mask { top: 55%; }
   .book-wrap { width: 110px; height: 157px; }
   .book { height: 157px; }
@@ -829,7 +844,15 @@ html, body {
 
 <!-- WORK -->
 <section class="work-hero" id="work">
-  <a href="/portfolio-all.html" class="work-title fade-in">Portfolio</a>
+  <a href="/portfolio-all.html" class="work-title fade-in">
+    <span class="work-title-text">Portfolio</span>
+    <span class="work-title-hint">
+      View all projects
+      <svg width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M5 13L13 5M13 5H6M13 5V12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </a>
   <div class="marquee-mask" style="--marquee-tilt: -7deg;" id="marquee"></div>
 </section>
 
