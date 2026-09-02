@@ -206,7 +206,7 @@ html, body {
 .hero {
   position: relative; width: 100%; overflow: hidden;
   background: #111111; min-height: 100vh;
-  scroll-snap-align: start;
+  scroll-snap-align: start; scroll-snap-stop: always;
 }
 @media (min-width: 768px) { .hero { height: 100vh; min-height: 800px; } }
 
@@ -267,7 +267,7 @@ html, body {
    can scroll past the hero (down into Work, or back up into Home). */
 .avatar-hero {
   position: relative; height: 130vh; background: #E4E4E4;
-  scroll-snap-align: start;
+  scroll-snap-align: start; scroll-snap-stop: always;
 }
 .avatar-hero-sticky {
   position: sticky; top: 0; width: 100%; height: 100vh;
@@ -393,7 +393,7 @@ html, body {
   position: relative; width: 100%; height: 100vh; min-height: 640px;
   overflow: hidden;
   background: #1c1c1c;
-  scroll-snap-align: start;
+  scroll-snap-align: start; scroll-snap-stop: always;
 }
 
 .work-title {
@@ -559,7 +559,7 @@ html, body {
   min-height: 100vh;
   background: #E4E4E4;
   display: flex; flex-direction: column; justify-content: center; align-items: center;
-  scroll-snap-align: start;
+  scroll-snap-align: start; scroll-snap-stop: always;
 }
 .contact-inner {
   max-width: 900px; margin: 0 auto;
