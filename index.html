@@ -1262,7 +1262,12 @@ html, body {
       if (startTs === null) startTs = ts;
       const t = Math.min(1, (ts - startTs) / duration);
       const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-      window.scrollTo(0, startY + diff * eased);
+      // behavior:'instant' is required here — a bare scrollTo(x,y)
+      // inherits the page's CSS scroll-behavior:smooth, so the browser
+      // was ALSO smoothing every one of these per-frame calls on top of
+      // our own easing, which just stalled the scroll and made it snap
+      // to the end instead of gliding.
+      window.scrollTo({ top: startY + diff * eased, left: 0, behavior: 'instant' });
       if (t < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
