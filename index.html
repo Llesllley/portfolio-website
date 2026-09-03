@@ -1250,11 +1250,27 @@ html, body {
   // (every relevant tick calls preventDefault), leaving the hero via a
   // few more native scroll ticks would fight the page's own mandatory
   // snap, which pulls back toward whichever snap point is nearest (i.e.
-  // right back into this section). Jumping straight to the neighbor
-  // via scrollIntoView sidesteps that entirely.
+  // right back into this section). Animating the scroll ourselves
+  // sidesteps that entirely, and — unlike the browser's own (quite
+  // fast) smooth-scroll — lets the handoff read as a deliberate glide
+  // down the page rather than an abrupt cut to the next section.
+  function animateScrollTo(targetY, duration) {
+    const startY = window.scrollY;
+    const diff = targetY - startY;
+    let startTs = null;
+    function step(ts) {
+      if (startTs === null) startTs = ts;
+      const t = Math.min(1, (ts - startTs) / duration);
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      window.scrollTo(0, startY + diff * eased);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
   function exitTo(goingDown) {
     const target = document.getElementById(goingDown ? 'work' : 'home');
-    if (target) target.scrollIntoView({ behavior: 'smooth' });
+    if (target) animateScrollTo(target.offsetTop, 1400);
   }
 
   function onWheel(e) {
